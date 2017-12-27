@@ -3,6 +3,7 @@ MAINTAINER jufab "https://github.com/jufab"
 LABEL authors=jufab
 
 ARG YADOMS_VERSION="2.0.1"
+ARG DEVELOPER_MODE="false"
 
 RUN apt -qqy update \
   && apt -qqy install \
@@ -12,27 +13,16 @@ RUN apt -qqy update \
   && rm -rf /var/lib/apt/lists/* \
   && apt -qyy clean
 
-
-#========================================
-# Add normal user with passwordless sudo
-#========================================
-RUN useradd yadoms \
-         --shell /bin/bash  \
-         --create-home \
-  && usermod -a -G sudo yadoms \
-  && gpasswd -a yadoms yadoms \
-  && echo 'yadoms:yadoms' | chpasswd \
-  && echo 'ALL ALL = (ALL) NOPASSWD: ALL' >> /etc/sudoers
-
-WORKDIR /home/yadoms
-ADD start.sh /home/yadoms/
-RUN chmod +x start.sh
-USER yadoms
+WORKDIR /usr/local/bin
 RUN wget https://github.com/Yadoms/yadoms/releases/download/${YADOMS_VERSION}/Yadoms-${YADOMS_VERSION}-Linux.tar.gz \
   && tar xzvf Yadoms-${YADOMS_VERSION}-Linux.tar.gz \
   && mv Yadoms-${YADOMS_VERSION}-Linux Yadoms/ \
   && rm Yadoms-${YADOMS_VERSION}-Linux.tar.gz
 
-CMD ["/home/yadoms/start.sh"]
+ENV PATH  /usr/local/bin/Yadoms/bin:$PATH
+
+COPY docker-entrypoint.sh /
 
 EXPOSE 8080
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["yadoms"]
