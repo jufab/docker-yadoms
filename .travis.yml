@@ -1,13 +1,12 @@
-sudo: required
-services:
-  - docker
+sudo: true
+dist: trusty
 
-
-script:
-- docker build -t jufab/yadoms .
-
-after_success:
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then
-    docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD";
-    docker push jfabre/yadoms;
-    fi
+jobs:
+  include:
+    - stage: build docker image
+      script:
+      - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+      - docker build -t yadoms .
+      - docker images
+      - docker tag yadoms $DOCKER_USERNAME/yadoms
+      - docker push $DOCKER_USERNAME/yadoms
