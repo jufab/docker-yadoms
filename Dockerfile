@@ -4,7 +4,6 @@ LABEL authors=jufab
 
 ARG YADOMS_VERSION="2.0.1"
 
-#COPY Yadoms-2.0.1-Linux.tar.gz /opt/bin/
 RUN apt -qqy update \
   && apt -qqy install \
     sudo \
@@ -31,8 +30,8 @@ RUN chmod +x start.sh
 USER yadoms
 RUN wget https://github.com/Yadoms/yadoms/releases/download/${YADOMS_VERSION}/Yadoms-${YADOMS_VERSION}-Linux.tar.gz \
   && tar xzvf Yadoms-${YADOMS_VERSION}-Linux.tar.gz \
-  && mkdir yadoms \
-  && mv Yadoms-${YADOMS_VERSION}-Linux Yadoms/
+  && mv Yadoms-${YADOMS_VERSION}-Linux Yadoms/ \
+  && rm Yadoms-${YADOMS_VERSION}-Linux.tar.gz
 
 CMD ["/home/yadoms/start.sh"]
 
