@@ -3,7 +3,7 @@ MAINTAINER jufab "https://github.com/jufab"
 LABEL authors=jufab
 
 ARG YADOMS_VERSION="2.0.1"
-ARG DEVELOPER_MODE="false"
+ENV DEVELOPER_MODE="false"
 
 RUN apt -qqy update \
   && apt -qqy install \
