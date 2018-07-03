@@ -2,7 +2,7 @@ FROM ubuntu:bionic
 MAINTAINER jufab "https://github.com/jufab"
 LABEL authors=jufab
 
-ARG YADOMS_VERSION="2.0.2"
+ARG YADOMS_VERSION="2.1.0"
 ENV DEVELOPER_MODE="false"
 
 RUN apt -qqy update \
